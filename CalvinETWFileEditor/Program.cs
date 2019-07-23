@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.CommandLine.DragonFruit;
 
 namespace TraceEventSamples
 {
@@ -19,16 +20,25 @@ namespace TraceEventSamples
     internal class SimpleFileRelogger
     {
         /// <summary>
-        /// Where all the output goes.  
+        /// This executable simply cuts up an ETW .etl file
+        /// The idea is that you'd like to use tools like Microsoft Message Analyzer (MMA) but MMA really struggles with large files
+        /// So with this, the file can be chopped to the minimum needed.
+        /// The intended usage is: 
+        /// - you capture an ETW trace with perfview / perfview commandline
+        /// - you open the capture with Perfview and identify a time period of interest (normally a few seconds before an event e.g. exception)
+        /// - you feed the start/end timepoints (millisconds) into this tool
         /// </summary>
-        //private static TextWriter Out = AllSamples.Out; // Console.Out
+        /// <param name="inputFileName">Name of the input .etl file</param>
+        /// <param name="outFileName">name of the output .etl file where filtered data will be savedto</param>
+        /// <param name="startMsec">Timestamp (msec) to start the cut </param>
+        /// <param name="stopMsec">Timestamp (msec) to end the cut</param>
 
-        public static void Main()
+        public static void Main(string inputFileName, string outFileName, double startMsec, double stopMsec)
         {
-            var inputFileName = "PerfViewData.etl";
-            var outFileName = "PerfviewData_Output.etl";
-            double startMsec = 2956.680;
-            double stopMsec = 3163.598;
+            // var inputFileName = "PerfViewData.etl";
+            //var outFileName = "PerfviewData_Output.etl";
+            //double startMsec = 2956.680;
+            //double stopMsec = 3163.598;
 
             // Create some data by listening for 10 seconds
             // DataCollection(inputFileName);
